@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .main-array {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .main-array-box {
+      position: relative;
+      padding: 5px;
+      margin: 10px;
+      text-align: center;
+      width: 100px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 40px;
+      border-radius: 10px;
+      background-color: orange;
+      color: white;
+    }
+
+    .sub-array-container {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .sub-array {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .sub-array-box {
+      padding: 5px;
+      margin: 30px;
+      width: 60px;
+      height: 40px;
+      border-radius: 10px;
+      background-color: skyblue;
+      font-size: 30px;
+      color: white;
+    }
+
+    .input-container {
+      margin-top: 20px;
+      text-align: left;
+      font-size: 30px;
+      border: 2px solid burlywood;
+      padding: 20px;
+    }
+
+    .input-container input {
+      margin: 5px;
+      block-size: 25px;
+      font-size: 20px;
+      width: 200px;
+    }
+
+    .input-container button {
+      margin-top: 10px;
+      border-radius: 4px;
+      background-color: #f4511e;
+      border: none;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 25px;
+      padding: 5px;
+      width: 200px;
+      transition: 0.5s;
+      cursor: pointer;
+    }
+
+    .input-container button:hover{
+      background-color: #ffcccc;
+      color: rgb(255, 0, 0);
+    }
+  </style>
+</head>
+<body style="background-color: bisque;">
+  <div class="container">
+    <h1 style="font-size: 50px;">Multilevel Hash Table</h1>
+    <div class="input-container">
+      <label for="valueInput">Value:</label>
+      <br>
+      <input type="number" id="valueInput" placeholder="Enter value">
+      <br>
+      <br>
+      <label for="sizeInput">Array Size:</label>
+      <br>
+      <input type="number" id="sizeInput" placeholder="Enter array size">
+      <br>
+      <br>
+      <button onclick="addValue()">Add Value</button>
+    </div>
+    <div class="t" style="font-size: 30px; text-align: left; margin-top: 20px;">First Level Hash Table</div>
+    <div class="main-array" id="mainArray"></div>
+    <div class="t" style="font-size: 30px; text-align: left; margin-top: 10px;">Second Level Hash Table</div>
+    <div class="sub-array-container" id="subArrayContainer"></div>
+  </div>
+
+  <script>
+    var mainArray = [];
+    var subArrays = [];
+
+    function addValue() {
+      var size = parseInt(document.getElementById('sizeInput').value);
+      var value = parseInt(document.getElementById('valueInput').value);
+
+      if (!isNaN(size) && !isNaN(value)) {
+        var index = value % size;
+        var subIndex = value % (size + 1);
+
+        if (mainArray[index]!='↓' && mainArray[index]) {
+          if (!subArrays[index]) {
+            subArrays[index] = [];
+          }
+          subArrays[index][subIndex] = value;
+          var subb = mainArray[index] % (size + 1);
+          subArrays[index][subb] = mainArray[index]
+          mainArray[index] = '↓';
+        } 
+        if (!mainArray[index]) {
+          mainArray[index] = value;
+        }
+        if (mainArray[index]=='↓')
+        {
+          subArrays[index][subIndex] = value;
+        }
+
+        displayArray();
+      }
+    }
+
+    function displayArray() {
+      var mainArrayContainer = document.getElementById('mainArray');
+      var subArrayContainer = document.getElementById('subArrayContainer');
+      mainArrayContainer.innerHTML = '';
+      subArrayContainer.innerHTML = '';
+
+      var size = parseInt(document.getElementById('sizeInput').value);
+      for (var i = 0; i < size; i++) {
+        var mainArrayBox = document.createElement('div');
+        mainArrayBox.className = 'main-array-box';
+        mainArrayBox.textContent = mainArray[i] ? mainArray[i] : '';
+
+        mainArrayContainer.appendChild(mainArrayBox);
+      }
+
+      for (var i = 0; i < size; i++) {
+        var subArray = document.createElement('div');
+        subArray.className = 'sub-array';
+
+        for (var j = 0; j <= size; j++) {
+          var subArrayBox = document.createElement('div');
+          subArrayBox.className = 'sub-array-box';
+          subArrayBox.textContent = subArrays[i] && subArrays[i][j] ? subArrays[i][j] : '';
+
+          subArray.appendChild(subArrayBox);
+        }
+
+        subArrayContainer.appendChild(subArray);
+      }
+    }
+  </script>
+</body>
+</html>
